@@ -1,7 +1,7 @@
-X = [3; 2; 1];
-[f_val,J] = test_function01(X)
+x_guess = randn(3,1);
 
-Xn = [];
-for i = 1:500
-    Xn = Xn - inv(J) * Xn * f_val;
-end
+solver_params.numerical_diff = 0;
+X_root = multi_newton_solver(@test_function01, x_guess, solver_params);
+
+[f_val, J] = test_function01(X_root)
+

@@ -40,39 +40,39 @@ function [x, exit_flag] = multi_newton_solver(fun,x_guess,solver_params)
 
     f = [];
     if numerical_diff == 0
-        f = fun(1);
-        jacobian = fun(2);
+        % f = fun(1);
+        % jacobian = fun(2);
+        [f, J] = fun(x_guess);
     else
-        f = fun;
+        f = fun(x_guess);
     end
 
     exit_flag = 0; % tracks whether or not code works, 0 = failed, 1 = succeeded 
-    
-    max_iter = 300;
+    max_iter = 500;
     Xn = x_guess;
     for i = 1:max_iter
 
         % set values and Jacobian
         if numerical_diff == 0 % analytical derivation
-            fn = f(Xn);
-            Jn = jacobian(Xn);
+            [fn, J] = fun(Xn);
         else
-            fn = f(Xn);
-            Jn = approximate_jacobian(f, Xn);
+            fn = fun(Xn);
+            J = approximate_jacobian(fun, Xn);
         end
 
-        if det(Jn * Jn') == 0 % matrix inversion safeguard
+        if det(J * J') == 0 % matrix inversion safeguard
+            %disp("matrix determinant is close to zero")
             break
         end
-        deltaX = Jn \ fn;
+        deltaX = J \ fn;
         Xn = Xn - deltaX;
 
         % early exit conditions
         if norm(deltaX) < dxtol
+            %disp("delta X is below tolerance")
             break
         end
-
-        if norm(f(Xn)) < ftol
+        if norm(fun(Xn)) < ftol
             exit_flag = 1;  % succeeded within acceptable parameters
             break
         end
@@ -80,7 +80,7 @@ function [x, exit_flag] = multi_newton_solver(fun,x_guess,solver_params)
     x = Xn;
 
     % check if succeeded
-    if (f(x) < ftol)
+    if (fun(x) < ftol)
         exit_flag = 1;
     end
 end

@@ -5,7 +5,7 @@
 %x: the input value of fun that we want to compute the derivative at
 %OUTPUTS:
 %J: approximation of Jacobian of fun at x
-function J = approximate_jacobian(fun,x)
+function J = approximate_jacobian(fun, x)
     m = length(fun(x));
     J = zeros(m, length(x));
     e = [];
@@ -16,7 +16,6 @@ function J = approximate_jacobian(fun,x)
         
         x_plus = x + h*e;
         x_minus = x - h*e;
-
 
         new_column = (fun(x_plus) - fun(x_minus)) / (2*h);
         J(:,i) = new_column;

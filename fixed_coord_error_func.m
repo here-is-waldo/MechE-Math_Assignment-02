@@ -12,17 +12,15 @@
 
 
 function coord_errors = fixed_coord_error_func(vertex_coords, leg_params, theta)
-
-v0 = leg_params.vertex_pos0; 
-v2_fixed = leg_params.vertex_pos2; 
-v1_fixed = v0 + leg_params.crank_length * [cos(theta); sin(theta)];
-
-x1 = vertex_coords(1,1); y1 = vertex_coords(2,1);
-x2 = vertex_coords(1,2); y2 = vertex_coords(2,2);
-
-coord_errors = [x1 - v1_fixed(1);
-                y1 - v1_fixed(2);
-                x2 - v2_fixed(1);
-                y2 - v2_fixed(2)];
+    coords = column_to_matrix(vertex_coords); 
+    v0 = leg_params.vertex_pos0; 
+    v2_fixed = leg_params.vertex_pos2; 
+    v1_fixed = v0 + leg_params.crank_length * [cos(theta); sin(theta)];
+    v1 = coords(1, :)'; 
+    v2 = coords(2, :)'; 
+    coord_errors = [ ...
+        v1(1) - v1_fixed(1);  
+        v1(2) - v1_fixed(2);  
+        v2(1) - v2_fixed(1);  
+        v2(2) - v2_fixed(2)];
 end
-

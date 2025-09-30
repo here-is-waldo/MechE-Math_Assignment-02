@@ -9,7 +9,7 @@
 function dVdtheta = compute_velocities(vertex_coords, leg_params, theta)
 
     link_length_error_vec = @(v_coords) link_length_error_func(v_coords, leg_params);
-
+    
     J = approximate_jacobian(link_length_error_vec, vertex_coords);
 
     d = leg_params.crank_length;

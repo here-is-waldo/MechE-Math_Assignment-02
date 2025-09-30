@@ -1,7 +1,26 @@
 
-% 
+% main executive code
 function projectile_animation()
-    
+    theta_guess = 0.3; % radians
+    t_guess = 11; % seconds
+
+    solve_init_conditions(theta_guess, t_guess)
+end
+
+% solve for initial theta and time of collision
+function [theta_i, t_coll] = solve_init_conditions(theta_guess, t_guess)
+
+    % Vin = [theta; t]
+    dist_func = @(Vin) projectile_traj(Vin(1), Vin(2)) - target_traj(Vin(2));
+ 
+    % make input
+    x_guess = [theta_guess, t_guess]; solver_params = struct(); 
+    % calc root of dist_fcn (when they collide)
+    [x_root, exit_flag] = multi_newton_solver(dist_fcn, x_guess, solver_params)
+
+    % store results
+    theta_i = x_root(1); t_coll = x_root(2);
+
 end
 
 
@@ -27,10 +46,27 @@ function V_t = target_traj(t)
     b1*sin(omega1*t+phi1)+b2*sin(omega2*t+phi2)+y0];
 end
 
+% wrapper function that isolates the x coord
+% of target trajectory at a given time
+function t_x = target_wrapper_x(input)
+    t = input(2);
+    target_pos = target_traj(t);
+    t_x = target_pos(1);
+end
+
+% wrapper function that isolates the y coord
+% of target trajectory at a given time
+function t_y = target_wrapper_y(input)
+    t = input(2);
+    target_pos = target_traj(t);
+    t_x = target_pos(2);
+end
+
+
 % projectile motion function
 % theta is angle projectile is fired at (in radians)
 % t is time in seconds
-function V_p = projectile_traj(theta,t)
+function V_p = projectile_traj(theta, t)
     g = 2.3; % gravity in m/sˆ2
     v0 = 14; % initial speed in m/s
     px0 = 2; % initial x position
@@ -39,6 +75,23 @@ function V_p = projectile_traj(theta,t)
     % compute position vector
     V_p = [v0*cos(theta)*t+px0; -.5*g*t.^2+v0*sin(theta)*t+py0];
 end
+
+% wrapper function that isolates the x coord
+% of the projectile trajectory at a given time
+function p_x = projectile_wrapper_x(input)
+    theta = input(1); t = input(2);
+    projectile_pos = projectile_traj(theta, t);
+    t_x = projectile_pos(1);
+end
+
+% wrapper function that isolates the y coord
+% of the  trajectory at a given time
+function p_y = projectile_wrapper_y(input)
+    theta = input(1); t = input(2);
+    projectile_pos = projectile_traj(theta, t);
+    t_x = projectile_pos(2);
+end
+
 
 %visualize the motion of the projectile and the target
 %theta is the initial firing angle of the projectile

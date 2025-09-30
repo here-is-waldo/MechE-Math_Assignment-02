@@ -36,11 +36,12 @@ function update_leg_drawing(complete_vertex_coords, leg_drawing, leg_params)
         dot_y = vertex_matrix(vertex_index, 2);
         set(leg_drawing.vertices{vertex_index},'xdata',dot_x,'ydata',dot_y);
     end
-    
+
     %your code here
     %crank_x and crank_y should both be two element arrays
     %containing the x and y coordinates of the line segment describing the crank
-    crank_x = %your code here
-    crank_y = %your code here
+
+    crank_x = [0, vertex_matrix(1, 1)];
+    crank_y = [0, vertex_matrix(1, 2)];
     set(leg_drawing.crank,'xdata',crank_x,'ydata',crank_y);
 end

@@ -20,8 +20,9 @@
 % are connected by the ith link, and d_i is the length of the ith link
 function length_errors = link_length_error_func(vertex_coords, leg_params)
 
-x_coords = vertex_coords(:,1);
-y_coords = vertex_coords(:,2);
+coords = column_to_matrix(vertex_coords);
+x_coords = coords(:,1);
+y_coords = coords(:,2);
 
 link_lengths = leg_params.link_lengths;
 link_to_vertex_list = leg_params.link_to_vertex_list;

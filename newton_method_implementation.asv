@@ -1,3 +1,0 @@
-x_guess = randin(3,1);
-X_root = multi_newton_solver(testfunction01, x);
-

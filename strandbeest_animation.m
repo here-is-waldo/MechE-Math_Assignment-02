@@ -54,7 +54,7 @@ leg_params.vertex_pos2 = [-38.0;-7.8];
     theta = 0;
     
 
-    while theta < 2*pi
+    while theta < 8*pi
         clf;
         xlim([-120, 30]);
         ylim([-120, 50]);

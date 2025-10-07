@@ -14,15 +14,13 @@ function dVdtheta = compute_velocities(vertex_coords, leg_params, theta)
 
     d = leg_params.crank_length;
     dx1 = d * -sin(theta); dy1 = d * cos(theta);
-    dx2 = 0; dy2 = 0;
-
-    M = zeros(14,14);
-    M(1,1) = 1; M(2,2) = 1; M(3,3) = 1; M(4,4) = 1;
-    M(5:14, :) = J;
     
+    add = eye(4, 14);
+    M = [add; J];
+
     B = zeros(14, 1);
     B(1) = dx1; B(2) = dy1;
 
-    dVdtheta = B \ M;
+    dVdtheta = M\B;
 
 end
